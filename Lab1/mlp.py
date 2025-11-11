@@ -16,8 +16,8 @@ def activation(x, activation):
         return 1 / (1 + np.exp(-x)) # Dont know if this is correct?
 
     elif activation == 'softmax':
-        # TODO
-        pass
+        e_x = np.exp(x - np.max(x))
+        return e_x / e_x.sum(axis=0)
 
     else:
         raise Exception("Activation function is not valid", activation) 
