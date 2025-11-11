@@ -44,9 +44,7 @@ pip install -r requirements.txt
 
 ### 4. Optional: Install the jupyter VS code package
 
-Make sure you have the [Jupyter VS code package](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) installed
-
-Select the venv as the interperter when you try to run `.ipynb` files in vscode
+Install the [Jupyter VS code package](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) from the marketplace and select the venv as the interperter when you try to run `.ipynb` files in vscode
 
 ## Starting the project
 
