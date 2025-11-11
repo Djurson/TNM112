@@ -7,16 +7,13 @@ def activation(x, activation):
     #TODO: specify the different activation functions
     # 'activation' could be: 'linear', 'relu', 'sigmoid', or 'softmax'
     if activation == 'linear':
-        # TODO
-        pass
+        return x
 
     elif activation == 'relu':
-        # TODO
-        pass
+        return np.max(0, x) # Dont know if this is correct?
 
     elif activation == 'sigmoid':
-        # TODO
-        pass
+        return 1 / (1 + np.exp(-x)) # Dont know if this is correct?
 
     elif activation == 'softmax':
         # TODO
