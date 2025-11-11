@@ -1,15 +1,8 @@
 # Introduction
 
-## Enviroments
+## Virtual enviroment
 
-<details>
-<summary>Virtual enviroment (VS code)</summary>
-
-### 1. Install the jupyter VS code package
-
-Make sure you have the [Jupyter VS code package](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) installed
-
-### 2. Create a virtual enviroment
+### 1. Create a virtual enviroment
 
 Create a virutal enviroment
 
@@ -25,7 +18,7 @@ _Windows:_
 python -m venv venv
 ```
 
-### 3. Activate the virtual enviroment
+### 2. Activate the virtual enviroment
 
 Activate the virtual enviroment
 
@@ -41,7 +34,7 @@ _Windows:_
 venv\Scripts\activate
 ```
 
-### 4. Install packages
+### 3. Install packages
 
 Make sure you have python and the required packages installed
 
@@ -49,28 +42,16 @@ Make sure you have python and the required packages installed
 pip install -r requirements.txt
 ```
 
-### 5. Select the enviroment
+### 4. Optional: Install the jupyter VS code package
 
-Select the venv interperter when you try to run `.ipynb` files
-</details>
+Make sure you have the [Jupyter VS code package](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter) installed
 
-<details>
-    <summary>Global enviroment</summary>
-
-Make sure you have python and the required packages installed
-
-```bash
-# MacOS
-pip3 install -r requirements.txt
-
-# Windows
-pip install -r requirements.txt
-```
-
-</details>
+Select the venv as the interperter when you try to run `.ipynb` files in vscode
 
 ## Starting the project
 
 ```bash
 jupyter notebook
 ```
+
+If you have the Jupyter VS code package. Run the `.ipynb` file(s)
