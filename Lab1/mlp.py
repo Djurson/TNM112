@@ -6,8 +6,22 @@ def activation(x, activation):
     
     #TODO: specify the different activation functions
     # 'activation' could be: 'linear', 'relu', 'sigmoid', or 'softmax'
-    if activation == '':
+    if activation == 'linear':
         # TODO
+        pass
+
+    elif activation == 'relu':
+        # TODO
+        pass
+
+    elif activation == 'sigmoid':
+        # TODO
+        pass
+
+    elif activation == 'softmax':
+        # TODO
+        pass
+
     else:
         raise Exception("Activation function is not valid", activation) 
 
@@ -51,6 +65,8 @@ class MLP:
         y = 
 
         # TODO: implement the feed-forward layer operations
+        for point in x:
+            pass
         # 1. Specify a loop over all the datapoints
         # 2. Specify the input layer (2x1 matrix)
         # 3. For each hidden layer, perform the MLP operations
