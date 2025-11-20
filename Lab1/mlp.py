@@ -10,10 +10,10 @@ def activation(x, activation):
         return x
 
     elif activation == 'relu':
-        return np.max(0, x) # Dont know if this is correct?
+        return np.maximum(0, x)
 
     elif activation == 'sigmoid':
-        return 1 / (1 + np.exp(-x)) # Dont know if this is correct?
+        return 1 / (1 + np.exp(-x))
 
     elif activation == 'softmax':
         e_x = np.exp(x - np.max(x))
@@ -42,13 +42,13 @@ class MLP:
         self.activation = activation
 
         # TODO: specify the number of hidden layers based on the length of the provided lists
-        self.hidden_layers = 
+        self.hidden_layers = len(W) - 1
 
-        self.W = W
+        self.W = W # -> Lecture 2 slide 21
         self.b = b
 
         # TODO: specify the total number of weights in the model (both weight matrices and bias vectors)
-        self.N = 0
+        self.N = sum(W1.size for W1 in W) + sum(b1.size for b1 in b) 
 
         print('Number of hidden layers: ', self.hidden_layers)
         print('Number of model weights: ', self.N)
@@ -59,18 +59,29 @@ class MLP:
         x      # Input data points
     ):
         # TODO: specify a matrix for storing output values
-        y = 
+        y = np.zeros((x.shape[0], self.dataset.K))
 
         # TODO: implement the feed-forward layer operations
-        for point in x:
-            pass
         # 1. Specify a loop over all the datapoints
+        for n in range(x.shape[0]):
+
         # 2. Specify the input layer (2x1 matrix)
+            h = x[n].reshape(2,1)
+
         # 3. For each hidden layer, perform the MLP operations
+            for l in range(self.hidden_layers):
+                
         #    - multiply weight matrix and output from previous layer
         #    - add bias vector
         #    - apply activation function
+                z = self.W[l] @ h + self.b[l]
+                h = activation(z, self.activation)
+            
         # 4. Specify the final layer, with 'softmax' activation
+            z_L = self.W[self.hidden_layers] @ h + self.b[self.hidden_layers]
+            h_L = activation(z_L, 'softmax')
+
+            y[n, :] = h_L[:,0]
         
         return y
 
@@ -81,13 +92,21 @@ class MLP:
         # TODO: formulate the training loss and accuracy of the MLP
         # Assume the mean squared error loss
         # Hint: For calculating accuracy, use np.argmax to get predicted class
-        train_loss = 
-        train_acc = 
+
+        y_train_pred = self.feedforward(self.dataset.x_train)
+
+        train_loss = np.mean((y_train_pred - self.dataset.y_train_oh)**2)
+        train_acc = np.mean(np.argmax(y_train_pred, axis=1) == self.dataset.y_train)
+
         print("\tTrain loss:     %0.4f"%train_loss)
         print("\tTrain accuracy: %0.2f"%train_acc)
 
         # TODO: formulate the test loss and accuracy of the MLP
-        test_loss = 
-        test_acc = 
-        print("\tTest loss:      %0.4f"%train_loss)
+
+        y_test_pred = self.feedforward(self.dataset.x_test)
+
+        test_loss = np.mean((y_test_pred - self.dataset.y_test_oh)**2)
+        test_acc = np.mean(np.argmax(y_test_pred, axis=1) == self.dataset.y_test)
+        
+        print("\tTest loss:      %0.4f"%test_loss)
         print("\tTest accuracy:  %0.2f"%test_acc)
