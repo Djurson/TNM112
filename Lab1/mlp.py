@@ -70,10 +70,12 @@ class MLP:
 
         # 3. For each hidden layer, perform the MLP operations
             for l in range(self.hidden_layers):
-                
+
         #    - multiply weight matrix and output from previous layer
         #    - add bias vector
         #    - apply activation function
+
+        #   Lecture 3: Slide 31
                 z = self.W[l] @ h + self.b[l]
                 h = activation(z, self.activation)
             
