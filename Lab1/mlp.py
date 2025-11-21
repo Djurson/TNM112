@@ -2,7 +2,7 @@ import numpy as np
 import data_generator
 
 # Different activations functions
-def activation(x: np.ndarray, activation: str):
+def activation(x, activation):
     
     # 'activation' could be: 'linear', 'relu', 'sigmoid', or 'softmax'
     if activation == 'linear':
@@ -15,7 +15,8 @@ def activation(x: np.ndarray, activation: str):
         return 1 / (1 + np.exp(-x))
 
     elif activation == 'softmax':
-        return np.exp(x - np.max(x)) / np.exp(x - np.max(x)).sum(axis=0)
+        exps = np.exp(x - np.max(x))
+        return exps / np.sum(exps)
 
     else:
         raise Exception("Activation function is not valid", activation) 
@@ -33,9 +34,9 @@ class MLP:
     # Set up the MLP from provided weights and biases
     def setup_model(
         self: 'MLP',
-        W: list[np.ndarray],                   # List of weight matrices
-        b: list[np.ndarray],                   # List of bias vectors
-        activation: str='linear'  # Activation function of layers
+        W,                   # List of weight matrices
+        b,                   # List of bias vectors
+        activation='linear'  # Activation function of layers
     ):
         self.activation = activation
 
@@ -46,7 +47,7 @@ class MLP:
         self.b = b
 
         # TODO: specify the total number of weights in the model (both weight matrices and bias vectors)
-        self.N = sum(W1.size for W1 in W) + sum(b1.size for b1 in b) 
+        self.N = sum(Wl.size for Wl in W) + sum(bl.size for bl in b) 
 
         print('Number of hidden layers: ', self.hidden_layers)
         print('Number of model weights: ', self.N)
@@ -54,17 +55,17 @@ class MLP:
     # Feed-forward through the MLP
     def feedforward(
         self: 'MLP',
-        x: np.ndarray      # Input data points
+        x      # Input data points
     ):
         # TODO: specify a matrix for storing output values
-        y = np.zeros((x.shape[0], self.dataset.K))
+        y = np.zeros((len(x), self.dataset.K))
 
         # TODO: implement the feed-forward layer operations
         # 1. Specify a loop over all the datapoints
-        for n in range(x.shape[0]):
+        for n, xn in enumerate(x):
 
         # 2. Specify the input layer (2x1 matrix)
-            h: np.ndarray = x[n].reshape(2,1)
+            h = xn.reshape(-1, 1)
 
         # 3. For each hidden layer, perform the MLP operations
             for l in range(self.hidden_layers):
@@ -78,10 +79,8 @@ class MLP:
                 h = activation(z, self.activation)
             
         # 4. Specify the final layer, with 'softmax' activation
-            z_L = self.W[self.hidden_layers] @ h + self.b[self.hidden_layers]
-            h_L = activation(z_L, 'softmax')
-
-            y[n, :] = h_L[:,0]
+            z_out = self.W[-1] @ h + self.b[-1]
+            y[n, :] = activation(z_out, 'softmax').flatten()
         
         return y
 
@@ -93,20 +92,19 @@ class MLP:
         # Assume the mean squared error loss
         # Hint: For calculating accuracy, use np.argmax to get predicted class
 
-        y_train_pred: np.ndarray = self.feedforward(self.dataset.x_train)
+        output_train = self.feedforward(self.dataset.x_train)        
+        output_test = self.feedforward(self.dataset.x_test)
 
-        train_loss = np.mean((y_train_pred - self.dataset.y_train_oh)**2)
-        train_acc = np.mean(np.argmax(y_train_pred, axis=1) == self.dataset.y_train)
+        train_loss = np.mean((output_train - self.dataset.y_train_oh)**2)
+        train_acc = np.mean(np.argmax(output_test, axis=1) == self.dataset.y_train) * 100
 
         print("\tTrain loss:     %0.4f"%train_loss)
         print("\tTrain accuracy: %0.2f"%train_acc)
 
         # TODO: formulate the test loss and accuracy of the MLP
 
-        y_test_pred: np.ndarray = self.feedforward(self.dataset.x_test)
-
-        test_loss = np.mean((y_test_pred - self.dataset.y_test_oh)**2)
-        test_acc = np.mean(np.argmax(y_test_pred, axis=1) == self.dataset.y_test)
+        test_loss = np.mean((output_test - self.dataset.y_test_oh)**2)
+        test_acc = np.mean(np.argmax(output_test, axis=1) == self.dataset.y_test) * 100
         
         print("\tTest loss:      %0.4f"%test_loss)
         print("\tTest accuracy:  %0.2f"%test_acc)
