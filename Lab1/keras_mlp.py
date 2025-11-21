@@ -99,7 +99,7 @@ class KerasMLP:
         plt.title('Model loss')
         plt.ylabel('Loss')
         plt.xlabel('Epoch')
-        plt.grid('on')
+        plt.grid(True)
         plt.legend(['Train', 'Validation'])
 
         # Plot accuracy on training and validation set
@@ -109,7 +109,7 @@ class KerasMLP:
         plt.title('Model accuracy')
         plt.ylabel('Accuracy')
         plt.xlabel('Epoch')
-        plt.grid('on')
+        plt.grid(True)
         plt.legend(['Train', 'Validation'])
 
         # Export figure if a path is provided
