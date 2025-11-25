@@ -3,8 +3,6 @@ import data_generator
 
 # Different activations functions
 def activation(x, activation):
-    
-    # 'activation' could be: 'linear', 'relu', 'sigmoid', or 'softmax'
     if activation == 'linear':
         return x
 
