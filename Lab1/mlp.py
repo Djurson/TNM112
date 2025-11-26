@@ -51,32 +51,16 @@ class MLP:
         print('Number of model weights: ', self.N)
 
     # Feed-forward through the MLP
-    def feedforward(
-        self: 'MLP',
-        x      # Input data points
-    ):
-        # TODO: specify a matrix for storing output values
+    def feedforward( self: 'MLP', x):
         y = np.zeros((len(x), self.dataset.K))
 
-        # TODO: implement the feed-forward layer operations
-        # 1. Specify a loop over all the datapoints
-        for n, xn in enumerate(x):
+        for n in range(len(x)):
+            h = x[n].reshape(2, 1)
 
-        # 2. Specify the input layer (2x1 matrix)
-            h = xn.reshape(-1, 1)
-
-        # 3. For each hidden layer, perform the MLP operations
             for l in range(self.hidden_layers):
-
-        #    - multiply weight matrix and output from previous layer
-        #    - add bias vector
-        #    - apply activation function
-
-        #   Lecture 3: Slide 31
-                z = self.W[l] @ h + self.b[l]
+                z = self.W[l] @ h + self.b[l] # Lecture 3: Slide 31
                 h = activation(z, self.activation)
             
-        # 4. Specify the final layer, with 'softmax' activation
             z_out = self.W[-1] @ h + self.b[-1]
             y[n, :] = activation(z_out, 'softmax').flatten()
         
@@ -91,15 +75,15 @@ class MLP:
         # Hint: For calculating accuracy, use np.argmax to get predicted class
 
         output_train = self.feedforward(self.dataset.x_train)        
-        output_test = self.feedforward(self.dataset.x_test)
 
         train_loss = np.mean((output_train - self.dataset.y_train_oh)**2)
-        train_acc = np.mean(np.argmax(output_test, axis=1) == self.dataset.y_train) * 100
+        train_acc = np.mean(np.argmax(output_train, axis=1) == self.dataset.y_train) * 100
 
         print("\tTrain loss:     %0.4f"%train_loss)
         print("\tTrain accuracy: %0.2f"%train_acc)
 
         # TODO: formulate the test loss and accuracy of the MLP
+        output_test = self.feedforward(self.dataset.x_test)
 
         test_loss = np.mean((output_test - self.dataset.y_test_oh)**2)
         test_acc = np.mean(np.argmax(output_test, axis=1) == self.dataset.y_test) * 100
