@@ -70,10 +70,6 @@ class MLP:
     def evaluate(self: 'MLP'):
         print('Model performance:')
 
-        # TODO: formulate the training loss and accuracy of the MLP
-        # Assume the mean squared error loss
-        # Hint: For calculating accuracy, use np.argmax to get predicted class
-
         output_train = self.feedforward(self.dataset.x_train)        
 
         train_loss = np.mean((output_train - self.dataset.y_train_oh)**2)
@@ -82,7 +78,6 @@ class MLP:
         print("\tTrain loss:     %0.4f"%train_loss)
         print("\tTrain accuracy: %0.2f"%train_acc)
 
-        # TODO: formulate the test loss and accuracy of the MLP
         output_test = self.feedforward(self.dataset.x_test)
 
         test_loss = np.mean((output_test - self.dataset.y_test_oh)**2)
