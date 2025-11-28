@@ -37,7 +37,7 @@ def conv2d_layer(h,     # activations from previous layer, shape = [height, widt
     # 2. Setup a nested loop over the number of output channels 
     #    and the number of input channels
     for i in range(CO):
-        Z = 0
+        z = 0
 
         for j in range(CI):
             # 3. Get the kernel mapping between channels i and j
@@ -49,15 +49,15 @@ def conv2d_layer(h,     # activations from previous layer, shape = [height, widt
 
             # 5. Run convolution (you can, e.g., look at the convolve2d
             #    function in the scipy.signal library)
-            convolved = signal.convolve2d(kernel, h[:,:,i], mode='same')
+            convolved = signal.convolve2d(h[:, :, j], kernel, mode='same')
 
             # 6. Sum convolutions over input channels, as described in the 
             #    equation for the convolutional layer
 
-            Z += convolved
+            z += convolved
 
         # 7. Finally, add the bias and apply activation function
-        h_j[:, :, i] = activation(Z + b[i], act)
+        h_j[:, :, i] = activation(z + b[i], act)
     
     return h_j
 
@@ -74,7 +74,7 @@ def pool2d_layer(h):  # activations from conv layer, shape = [height, width, cha
     #    You can, e.g., look at the measure.block_reduce() function
     #    in the skimage library
     for i in range(h.shape[2]):
-        ho[:, :, i] = skimage.measure.block_reduce(h[:, :, i], func=np.max)
+        ho[:, :, i] = skimage.measure.block_reduce(h[:, :, i], (2, 2), np.max)
     return ho
 
 
@@ -95,7 +95,7 @@ def dense_layer(h,   # Activations from previous layer
     # You can use the code from your implementation
     # in Lab 1. Make sure that the h vector is a [Kx1] array.
 
-    h = h[0,:].reshape(len(h), 1)
+    h = h.reshape(len(h), 1)
 
     z = W @ h + b # Lecture 3: Slide 31
     h = activation(z, act)
