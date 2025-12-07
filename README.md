@@ -6,7 +6,7 @@
 
 Create a virutal enviroment
 
-_MacOS:_
+_MacOS/Linux:_
 
 ```bash
 python3 -m venv venv
@@ -22,7 +22,7 @@ python -m venv venv
 
 Activate the virtual enviroment
 
-_MacOS:_
+_MacOS/Linux:_
 
 ```bash
 source ./venv/bin/activate
@@ -41,6 +41,16 @@ Make sure you have python and the required packages installed
 ```bash
 pip install -r requirements.txt
 ```
+
+#### Lab 2 Task 3
+
+For Lab 2/Task 3 you also need PyTorch, for cpu. This is not included in the [requirements.txt](requirements.txt) file:
+
+```bash
+pip install torch torchvision
+```
+
+For GPU execution you need to install the [supported version](https://pytorch.org/get-started/locally/)
 
 ### 4. Optional: Install the jupyter VS code package
 
