@@ -67,9 +67,9 @@ def pytorch_pred_test_tta(model, test_loader, name='submission.csv'):
     df.to_csv(name)
     print(f'Done! Predictions saved to {name}.')
 
-BATCH_SIZE = 512
+BATCH_SIZE = 128
 epochs = 40
-learning_rate = 0.002 
+learning_rate = 0.001 
 L2_LAMBDA = 1e-4 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

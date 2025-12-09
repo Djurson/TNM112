@@ -181,3 +181,4 @@ cython_debug/
 .cursorindexingignore
 /Lab2/patchcam
 submission.csv
+/Lab2/task3-tensorflow/submissions
