@@ -62,8 +62,11 @@ data_augmentation = keras.Sequential([
 ])
 
 inputs = keras.Input(shape=data.x_train.shape[1:])
-
 x = data_augmentation(inputs)
+
+x = layers.Conv2D(32, (3, 3), padding='same', kernel_initializer='glorot_normal')(x)
+x = layers.BatchNormalization()(x)
+x = layers.LeakyReLU(alpha=0.1)(x)
 
 residual_1 = x
 residual_1 = layers.Conv2D(32, (1, 1), padding='same', kernel_initializer='glorot_normal')(residual_1)
@@ -76,43 +79,48 @@ x = layers.BatchNormalization()(x)
 
 x = layers.Add()([x, residual_1])
 x = layers.LeakyReLU(alpha=0.1)(x)
-x = layers.MaxPooling2D((2, 2))(x)
+# x = layers.MaxPooling2D((2, 2))(x)
 x = layers.Dropout(0.3)(x)
 
 residual_2 = x
-residual_2 = layers.Conv2D(64, (1, 1), padding='same', kernel_initializer='glorot_normal')(residual_2)
+residual_2 = layers.Conv2D(64, (1, 1), strides=2, padding='same', kernel_initializer='glorot_normal')(residual_2)
+residual_2 = layers.BatchNormalization()(residual_2)
 
-x = layers.Conv2D(64, (3, 3), padding='same', kernel_initializer='glorot_normal')(x)
+x = layers.Conv2D(64, (3, 3), strides=2, padding='same', kernel_initializer='glorot_normal')(x)
 x = layers.BatchNormalization()(x)
 x = layers.LeakyReLU(alpha=0.1)(x)
-x = layers.Conv2D(64, (3, 3), padding='same', kernel_initializer='glorot_normal')(x)
+
+x = layers.Conv2D(64, (3, 3), strides=1, padding='same', kernel_initializer='glorot_normal')(x)
 x = layers.BatchNormalization()(x)
 
 x = layers.Add()([x, residual_2])
 x = layers.LeakyReLU(alpha=0.1)(x)
-x = layers.MaxPooling2D((2, 2))(x)
 x = layers.Dropout(0.3)(x)
 
-residual_3 = x
+residual_3 = x 
 
-residual_3 = layers.Conv2D(128, (1, 1), padding='same', kernel_initializer='glorot_normal')(residual_3)
-x = layers.Conv2D(128, (3, 3), padding='same', kernel_initializer='glorot_normal')(x)
+# Shortcut path (stride=2 och 64 -> 128 kanaler)
+residual_3 = layers.Conv2D(128, (1, 1), strides=2, padding='same', kernel_initializer='glorot_normal')(residual_3)
+residual_3 = layers.BatchNormalization()(residual_3) # <-- BatchNorm tillagd
+
+# Main path (stride=2 i första Conv2D)
+x = layers.Conv2D(128, (3, 3), strides=2, padding='same', kernel_initializer='glorot_normal')(x) # <-- strides=2 tillagd
 x = layers.BatchNormalization()(x)
 x = layers.LeakyReLU(alpha=0.1)(x)
-x = layers.Conv2D(128, (3, 3), padding='same', kernel_initializer='glorot_normal')(x)
+x = layers.Conv2D(128, (3, 3), strides=1, padding='same', kernel_initializer='glorot_normal')(x)
 x = layers.BatchNormalization()(x)
 
 x = layers.Add()([x, residual_3])
 x = layers.LeakyReLU(alpha=0.1)(x)
-x = layers.Dropout(0.3)(x)
+x = layers.Dropout(0.2)(x)
 
 x = layers.GlobalAveragePooling2D()(x)
 
 # x = layers.Flatten()(x)
-x = layers.Dense(256, kernel_regularizer=regularizers.l2(0.0001), kernel_initializer='glorot_normal')(x)
-x = layers.BatchNormalization()(x)
+x = layers.Dense(256, kernel_initializer='glorot_normal')(x)
 x = layers.LeakyReLU(alpha=0.1)(x)
-x = layers.Dropout(0.3)(x)
+x = layers.BatchNormalization()(x)
+x = layers.Dropout(0.2)(x)
 
 outputs = layers.Dense(data.K, activation='softmax')(x)
 model = Model(inputs=inputs, outputs=outputs)

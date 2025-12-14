@@ -1,4 +1,4 @@
-# Introduction
+# TNM112 - Deep learning for media technology
 
 ## Virtual enviroment
 
@@ -42,15 +42,23 @@ Make sure you have python and the required packages installed
 pip install -r requirements.txt
 ```
 
+### Lab 2
+
+Download the patchcam dataset and put the patchcam foler in `/TNM112/Lab2` folder.
+
 #### Lab 2 Task 3
 
-For Lab 2/Task 3 you also need PyTorch, for cpu. This is not included in the [requirements.txt](requirements.txt) file:
+For Lab 2/Task 3 you also need PyTorch (not included in the [requirements.txt](requirements.txt) file)
+
+For cpu:
 
 ```bash
 pip install torch torchvision
 ```
 
 For GPU execution you need to install the [supported version](https://pytorch.org/get-started/locally/)
+
+You can also install tensorflow with CUDA/ROCm support, you need to install the supported version for [nvidia](https://www.tensorflow.org/install/pip) or [amd](https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/3rd-party/tensorflow-install.html#install-tensorflow-versions) GPUs.
 
 ### 4. Optional: Install the jupyter VS code package
 
