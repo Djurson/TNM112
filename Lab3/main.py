@@ -1,20 +1,4 @@
-"""Lab 3 (Proposal 1) – Convolutional Autoencoder
-Based on the Lab 2 project structure (DataGenerator etc.), but adapted for autoencoder training.
-
-Normalization: [0, 1]
-Loss: MSE
-Task: Reconstruct input images (unsupervised)
-
-Run:
-    python lab03_autoencoder.py
-
-Optional:
-    Edit DATASET, EPOCHS, LATENT_DIMS to experiment.
-"""
-
 from __future__ import annotations
-
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow import keras
@@ -23,14 +7,10 @@ from tensorflow.keras import layers
 from data_generator import DataGenerator
 from util_ae import evaluate_ae, plot_training_ae, plot_reconstructions
 
-
-# -----------------------------
-# Settings
-# -----------------------------
 DATASET = "mnist"        
 EPOCHS = 10
 BATCH_SIZE = 128
-LATENT_DIMS = [2, 16, 64]   # experiment: compare these
+LATENT_DIMS = [2, 16, 64]
 SEED = 0
 
 
@@ -44,12 +24,11 @@ def build_autoencoder(input_shape, latent_dim: int):
 
     # Encoder
     x = layers.Conv2D(32, 3, activation="relu", padding="same")(inputs)
-    x = layers.MaxPooling2D(2, padding="same")(x)  # /2
+    x = layers.MaxPooling2D(2, padding="same")(x)
     x = layers.Conv2D(64, 3, activation="relu", padding="same")(x)
-    x = layers.MaxPooling2D(2, padding="same")(x)  # /4
+    x = layers.MaxPooling2D(2, padding="same")(x)
 
-    # For non-28 images, the spatial dims may differ; handle dynamically
-    shape_before_flatten = keras.backend.int_shape(x)[1:]  # (H, W, C)
+    shape_before_flatten = keras.backend.int_shape(x)[1:]
     x = layers.Flatten()(x)
     latent = layers.Dense(latent_dim, name="latent")(x)
 
@@ -62,7 +41,6 @@ def build_autoencoder(input_shape, latent_dim: int):
     x = layers.UpSampling2D(2)(x)
     x = layers.Conv2D(32, 3, activation="relu", padding="same")(x)
 
-    # Output layer: match channels of input, keep outputs in [0,1]
     outputs = layers.Conv2D(input_shape[-1], 3, activation="sigmoid", padding="same")(x)
 
     model = keras.Model(inputs, outputs, name=f"autoencoder_latent{latent_dim}")
@@ -77,7 +55,6 @@ def main():
     data = DataGenerator(verbose=True)
     data.generate(dataset=DATASET)
 
-    # Make sure we are in [0,1] (this is done in our modified DataGenerator)
     assert data.x_train.min() >= 0.0 - 1e-6 and data.x_train.max() <= 1.0 + 1e-6, \
         "Expected normalized data in [0,1]. Check data_generator.normalize()."
 
@@ -106,10 +83,8 @@ def main():
         train_mse, val_mse = evaluate_ae(model, data, final=False)
         results.append((latent_dim, float(train_mse), float(val_mse)))
 
-        # Plots (optional but useful for report)
         plot_training_ae(history)
 
-        # Reconstructions
         cmap = "gray" if input_shape[-1] == 1 else None
         plot_reconstructions(model, data.x_test, n=10, cmap=cmap if cmap else "viridis")
 

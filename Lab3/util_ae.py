@@ -26,7 +26,6 @@ def plot_training_ae(history):
     plt.figure(figsize=(8,4))
     plt.plot(loss)
     if len(val_loss) > 0:
-        # Keras sometimes logs val every epoch, sometimes less; plot directly.
         plt.plot(val_loss)
         plt.legend(["Train", "Validation"])
     else:
